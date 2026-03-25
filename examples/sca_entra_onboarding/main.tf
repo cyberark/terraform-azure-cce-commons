@@ -1,0 +1,61 @@
+terraform {
+  required_version = ">= 1.8.5"
+  required_providers {
+    idsec = {
+      source  = "registry.terraform.io/cyberark/idsec"
+      version = "~> 1.3"
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "~> 3.0"
+    }
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 4.0"
+    }
+  }
+}
+
+provider "azurerm" {
+  subscription_id = var.subscription_id
+  features {}
+}
+
+provider "azuread" {}
+
+provider "idsec" {
+  # Configure with your CyberArk tenant credentials
+  # See: https://registry.terraform.io/providers/cyberark/idsec/latest/docs
+}
+
+# Commons: create SCA shared resources (Entra app, Resource app, roles, etc.)
+module "cce_azure_shared" {
+  source   = "../.."
+  entra_id = var.entra_id
+
+  identity_cloud_tenant_num = var.identity_cloud_tenant_num
+
+  sca = {
+    enable = var.sca.enable
+    parameters = {
+      sca_entra_onboarding        = var.sca.parameters.sca_entra_onboarding
+      sca_entra_app_id            = var.sca.parameters.sca_entra_app_id
+      sca_entra_custom_role_id    = var.sca.parameters.sca_entra_custom_role_id
+      sca_entra_wif_username      = var.sca.parameters.sca_entra_wif_username
+      sca_resource_app_id         = var.sca.parameters.sca_resource_app_id
+      sca_resource_custom_role_id = var.sca.parameters.sca_resource_custom_role_id
+      sca_resource_wif_username   = var.sca.parameters.sca_resource_wif_username
+    }
+  }
+}
+
+# Entra: use Commons output to complete SCA onboarding at Entra scope (role assignment, idsec registration)
+# module "cce_entra" {
+#   source   = "../terraform-azure-cce-entra"
+#   entra_id = var.entra_id
+#   sia      = { enable = false }
+#   sca = {
+#     enable           = var.sca.enable
+#     shared_resources = module.cce_azure_shared.sca
+#   }
+# }

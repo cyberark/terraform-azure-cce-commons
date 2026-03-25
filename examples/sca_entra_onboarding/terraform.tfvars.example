@@ -1,0 +1,19 @@
+entra_id                 = "0b659685-1a00-43cd-b994-555bac390ecf"
+subscription_id          = "34ea05f7-b5bb-40cd-944e-0f8ba82dc4d9" # Replace with your subscription ID
+identity_cloud_tenant_num = "46747"                                 # Optional: match your Identity suffix for SCA usernames
+
+# When running from repo with sibling terraform-azure-cce-entra
+entra_module_source      = "../../../terraform-azure-cce-entra"
+
+sca = {
+  enable = true
+  parameters = {
+    sca_entra_onboarding        = true
+    sca_entra_app_id            = null
+    sca_entra_custom_role_id    = null
+    sca_entra_wif_username      = null
+    sca_resource_app_id         = null
+    sca_resource_custom_role_id = null
+    sca_resource_wif_username   = null
+  }
+}

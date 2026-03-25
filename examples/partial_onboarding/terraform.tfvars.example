@@ -1,0 +1,23 @@
+entra_id                 = "0b659685-1a00-43cd-b994-555bac390ecf"
+entra_tenant_name        = "my-tenant"                    # Replace with your Entra tenant name
+subscription_id          = "34ea05f7-b5bb-40cd-944e-0f8ba82dc4d9"
+subscription_name        = "My Subscription"             # Replace with your subscription display name
+management_group_id      = "my-mg-id"                     # Replace with your Management Group ID
+identity_cloud_tenant_num = "46747"                        # Optional
+
+# Module paths when running from repo with sibling terraform-azure-cce-* modules
+mg_module_source         = "../../../terraform-azure-cce-management-group"
+subscription_module_source = "../../../terraform-azure-cce-subscription"
+
+sca = {
+  enable = true
+  parameters = {
+    sca_entra_onboarding        = true
+    sca_entra_app_id            = null
+    sca_entra_custom_role_id    = null
+    sca_entra_wif_username      = null
+    sca_resource_app_id         = null
+    sca_resource_custom_role_id = null
+    sca_resource_wif_username   = null
+  }
+}
