@@ -47,4 +47,20 @@ variable "sca" {
     }), {})
   })
   default = { enable = false, parameters = {} }
+
+  validation {
+    condition = (
+      var.sca.parameters.sca_entra_wif_username == null ||
+      !can(regex(":\\*$", var.sca.parameters.sca_entra_wif_username))
+    )
+    error_message = "SCA Entra WIF username must follow the format 'repo:org/repo:ref:refs/heads/main' to ensure secure OIDC trust policy."
+  }
+
+  validation {
+    condition = (
+      var.sca.parameters.sca_resource_wif_username == null ||
+      !can(regex(":\\*$", var.sca.parameters.sca_resource_wif_username))
+    )
+    error_message = "SCA Resource WIF username must follow the format 'repo:org/repo:ref:refs/heads/main' to ensure secure OIDC trust policy."
+  }
 }
