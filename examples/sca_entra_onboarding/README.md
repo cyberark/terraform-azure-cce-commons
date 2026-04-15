@@ -25,8 +25,7 @@ This example demonstrates: create SCA shared resources with the Commons module, 
 1. Copy `terraform.tfvars.example` to `terraform.tfvars` and update the values:
 
     ```hcl
-    entra_id                 = "0b659685-1a00-43cd-b994-555bac390ecf"
-    identity_cloud_tenant_num = "46747"  # Optional: match your Identity suffix for SCA usernames
+    entra_id = "0b659685-1a00-43cd-b994-555bac390ecf"
     ```
 
 2. Configure the idsec provider (e.g. environment variables or provider block) with your CyberArk credentials.

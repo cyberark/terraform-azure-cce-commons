@@ -2,8 +2,8 @@ terraform {
   required_version = ">= 1.8.5"
   required_providers {
     idsec = {
-      source  = "registry.terraform.io/cyberark/idsec"
-      version = "~> 1.3"
+      source  = "cyberark/idsec"
+      version = "~> 0.2.1"
     }
     azuread = {
       source  = "hashicorp/azuread"
@@ -30,10 +30,9 @@ provider "idsec" {
 
 # Commons: create SCA shared resources (Entra app, Resource app, roles, etc.)
 module "cce_azure_shared" {
-  source   = "../.."
+  source   = "cyberark/cce-commons/azure"
+  version  = "0.1.0"
   entra_id = var.entra_id
-
-  identity_cloud_tenant_num = var.identity_cloud_tenant_num
 
   sca = {
     enable = var.sca.enable
@@ -50,12 +49,13 @@ module "cce_azure_shared" {
 }
 
 # Entra: use Commons output to complete SCA onboarding at Entra scope (role assignment, idsec registration)
-# module "cce_entra" {
-#   source   = "../terraform-azure-cce-entra"
-#   entra_id = var.entra_id
-#   sia      = { enable = false }
-#   sca = {
-#     enable           = var.sca.enable
-#     shared_resources = module.cce_azure_shared.sca
-#   }
-# }
+module "cce_entra" {
+  source   = "cyberark/cce-entra/azure"
+  version  = "0.1.0"
+  entra_id = var.entra_id
+  sia      = { enable = false }
+  sca = {
+    enable           = var.sca.enable
+    shared_resources = module.cce_azure_shared.sca
+  }
+}

@@ -26,7 +26,7 @@ This example demonstrates the same pattern as [sca_entra_onboarding](../sca_entr
     subscription_module_source = "../../../terraform-azure-cce-subscription"
     ```
 
-2. Copy `terraform.tfvars.example` to `terraform.tfvars` and set `entra_id`, `subscription_id`, `management_group_id`, `entra_tenant_name`, `subscription_name`, and optional `identity_cloud_tenant_num`.
+2. Copy `terraform.tfvars.example` to `terraform.tfvars` and set `entra_id`, `subscription_id`, `management_group_id`, `entra_tenant_name`, and `subscription_name`.
 
 3. Configure the idsec provider and run:
 

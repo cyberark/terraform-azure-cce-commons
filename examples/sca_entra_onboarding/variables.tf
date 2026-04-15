@@ -8,12 +8,6 @@ variable "subscription_id" {
   type        = string
 }
 
-variable "identity_cloud_tenant_num" {
-  description = "Optional cloud tenant number for SCA WIF usernames (e.g. Identity suffix from GetAliasesForTenant)"
-  type        = string
-  default     = null
-}
-
 variable "sca" {
   description = "SCA configuration"
   type = object({

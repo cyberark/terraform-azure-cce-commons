@@ -2,8 +2,8 @@ terraform {
   required_version = ">= 1.8.5"
   required_providers {
     idsec = {
-      source  = "registry.terraform.io/cyberark/idsec"
-      version = "~> 1.3"
+      source  = "cyberark/idsec"
+      version = "~> 0.2.1"
     }
     azuread = {
       source  = "hashicorp/azuread"
@@ -30,10 +30,9 @@ provider "idsec" {
 
 # Commons: SCA shared resources (Entra app, Resource app, roles, etc.)
 module "cce_azure_shared" {
-  source   = "../.."
+  source   = "cyberark/cce-commons/azure"
+  version  = "0.1.0"
   entra_id = var.entra_id
-
-  identity_cloud_tenant_num = var.identity_cloud_tenant_num
 
   sca = {
     enable = var.sca.enable
@@ -50,26 +49,28 @@ module "cce_azure_shared" {
 }
 
 # Management Group: partial SCA onboarding using shared_resources from Commons
-# module "cce_management_group" {
-#   source              = "../../../terraform-azure-cce-management-group"
-#   entra_id            = var.entra_id
-#   management_group_id = var.management_group_id
-#   sca = {
-#     enable           = var.sca.enable
-#     shared_resources = module.cce_azure_shared.sca
-#   }
-# }
+module "cce_management_group" {
+  source              = "cyberark/cce-management-group/azure"
+  version             = "0.1.0"
+  entra_id            = var.entra_id
+  management_group_id = var.management_group_id
+  sca = {
+    enable           = var.sca.enable
+    shared_resources = module.cce_azure_shared.sca
+  }
+}
 
 # Subscription: partial SCA onboarding using shared_resources from Commons
-# module "cce_subscription" {
-#   source            = "../../../terraform-azure-cce-subscription"
-#   entra_id          = var.entra_id
-#   entra_tenant_name = var.entra_tenant_name
-#   subscription_id   = var.subscription_id
-#   subscription_name = var.subscription_name
-#   sia               = { enable = false }
-#   sca = {
-#     enable           = var.sca.enable
-#     shared_resources = module.cce_azure_shared.sca
-#   }
-# }
+module "cce_subscription" {
+  source            = "cyberark/cce-subscription/azure"
+  version           = "0.1.0"
+  entra_id          = var.entra_id
+  entra_tenant_name = var.entra_tenant_name
+  subscription_id   = var.subscription_id
+  subscription_name = var.subscription_name
+  sia               = { enable = false }
+  sca = {
+    enable           = var.sca.enable
+    shared_resources = module.cce_azure_shared.sca
+  }
+}

@@ -32,9 +32,6 @@ module "cce_azure_shared" {
   source   = "path/to/terraform-azure-cce-commons"
   entra_id = "280a06f4-3f9b-4910-8967-053a914e314e"
 
-  # Optional: set to match your tenant's Identity suffix for SCA usernames
-  identity_cloud_tenant_num = "46747"
-
   sca = {
     enable = true
     parameters = {
@@ -104,7 +101,6 @@ output "sca_resource_app_id" {
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|----------|
 | `entra_id` | The Azure Entra ID (tenant ID) | `string` | n/a | yes |
-| `identity_cloud_tenant_num` | Optional cloud tenant number for SCA WIF usernames | `string` | `null` | no |
 | `sca.enable` | Enable SCA service integration | `bool` | `false` | no |
 | `sca.parameters.sca_entra_onboarding` | Create Entra-level SCA app and role (true) or use existing IDs (false) | `bool` | `false` | no |
 | `sca.parameters.sca_entra_app_id` | Existing Entra application ID (when sca_entra_onboarding=false) | `string` | `null` | no |
