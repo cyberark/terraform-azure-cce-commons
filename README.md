@@ -156,7 +156,7 @@ terraform-azure-cce-commons/
 ├── examples/
 │   ├── sca_entra_onboarding/   # Commons → use output in Entra module
 │   └── partial_onboarding/    # Commons → use output in MG and Subscription modules
-└── services_modules/
+└── modules/
     └── sca/
         ├── main.tf      # SCA service resource definitions
         ├── variables.tf # SCA service variables

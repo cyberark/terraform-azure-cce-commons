@@ -17,7 +17,7 @@ locals {
 }
 
 module "sca" {
-  source            = "./services_modules/sca"
+  source            = "./modules/sca"
   count             = var.sca.enable ? 1 : 0
   entra_id          = var.entra_id
   tenant_id         = local.tenant_id
