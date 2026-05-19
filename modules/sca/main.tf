@@ -43,11 +43,12 @@ locals {
   microsoft_graph_app_id = "00000003-0000-0000-c000-000000000000"
   entra_permissions = {
     "RoleManagement.Read.Directory" = "9e3f62cf-ca93-4989-b6ce-bf83c28f9fe8"
-    "Directory.ReadWrite.All"       = "19dbc75e-c2e2-444c-a770-ec69d8559fc7"
+    "Group.ReadWrite.All"           = "62a82d76-70ea-41e2-9197-370581804d09"
+    "User.ReadBasic.All"            = "97235f07-e226-4f63-ace3-39588e11d3a1"
   }
   resource_permissions = {
     "Group.ReadWrite.All"       = "62a82d76-70ea-41e2-9197-370581804d09"
-    "User.Read.All"             = "df021288-bdef-4463-88db-98f22de89214"
+    "User.ReadBasic.All"        = "97235f07-e226-4f63-ace3-39588e11d3a1"
     "GroupMember.ReadWrite.All" = "dbaae8cf-10b5-4b86-a4a1-f871c94c6695"
     "Group.Create"              = "bf7b1a76-6e77-406b-b258-bf5c7720e98f"
   }
@@ -80,7 +81,11 @@ resource "azuread_application" "sca_entra_app" {
       type = "Role"
     }
     resource_access {
-      id   = local.entra_permissions["Directory.ReadWrite.All"]
+      id   = local.entra_permissions["Group.ReadWrite.All"]
+      type = "Role"
+    }
+    resource_access {
+      id   = local.entra_permissions["User.ReadBasic.All"]
       type = "Role"
     }
   }
@@ -101,9 +106,16 @@ resource "azuread_app_role_assignment" "msgraph_rolemanagement" {
   resource_object_id  = data.azuread_service_principal.msgraph.object_id
 }
 
-resource "azuread_app_role_assignment" "msgraph_directory" {
+resource "azuread_app_role_assignment" "msgraph_entra_group_readwrite" {
   count               = local.create_entra_app ? 1 : 0
-  app_role_id         = local.entra_permissions["Directory.ReadWrite.All"]
+  app_role_id         = local.entra_permissions["Group.ReadWrite.All"]
+  principal_object_id = azuread_service_principal.sca_entra_app_sp[0].object_id
+  resource_object_id  = data.azuread_service_principal.msgraph.object_id
+}
+
+resource "azuread_app_role_assignment" "msgraph_entra_user_readbasic" {
+  count               = local.create_entra_app ? 1 : 0
+  app_role_id         = local.entra_permissions["User.ReadBasic.All"]
   principal_object_id = azuread_service_principal.sca_entra_app_sp[0].object_id
   resource_object_id  = data.azuread_service_principal.msgraph.object_id
 }
@@ -134,7 +146,8 @@ resource "azurerm_role_definition" "sca_entra_custom_role" {
     azuread_application.sca_entra_app,
     azuread_service_principal.sca_entra_app_sp,
     azuread_app_role_assignment.msgraph_rolemanagement,
-    azuread_app_role_assignment.msgraph_directory,
+    azuread_app_role_assignment.msgraph_entra_group_readwrite,
+    azuread_app_role_assignment.msgraph_entra_user_readbasic,
     azuread_application_federated_identity_credential.sca_entra_credentials,
   ]
 
@@ -158,7 +171,7 @@ resource "azuread_application" "sca_resource_app" {
       type = "Role"
     }
     resource_access {
-      id   = local.resource_permissions["User.Read.All"]
+      id   = local.resource_permissions["User.ReadBasic.All"]
       type = "Role"
     }
     resource_access {
@@ -188,7 +201,7 @@ resource "azuread_app_role_assignment" "msgraph_group_readwrite" {
 }
 resource "azuread_app_role_assignment" "msgraph_user_read" {
   count               = local.create_resource_app ? 1 : 0
-  app_role_id         = local.resource_permissions["User.Read.All"]
+  app_role_id         = local.resource_permissions["User.ReadBasic.All"]
   principal_object_id = azuread_service_principal.sca_resource_app_sp[0].object_id
   resource_object_id  = data.azuread_service_principal.msgraph.object_id
 }
