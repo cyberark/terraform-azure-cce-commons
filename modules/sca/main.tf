@@ -30,12 +30,12 @@ locals {
   entra_id_suffix  = element(split("-", var.entra_id), length(split("-", var.entra_id)) - 1)
   unique_id        = "${local.tenant_id_suffix}-${local.entra_id_suffix}"
 
-  entra_app_display_name             = "cyberark-sca-app-entra-${local.unique_id}"
-  entra_role_display_name            = "cyberark-sca-role-entra-${local.unique_id}"
-  resource_app_display_name          = "cyberark-sca-app-resource-${local.unique_id}"
-  resource_role_display_name         = "cyberark-sca-role-resource-${local.unique_id}"
-  entra_federated_credential_name    = "cyberark-sca-app-entra-user-${local.unique_id}"
-  resource_federated_credential_name = "cyberark-sca-app-resource-user-${local.unique_id}"
+  entra_app_display_name             = "sca-app-entra-${local.unique_id}"
+  entra_role_display_name            = "sca-role-entra-${local.unique_id}"
+  resource_app_display_name          = "sca-app-resource-${local.unique_id}"
+  resource_role_display_name         = "sca-role-resource-${local.unique_id}"
+  entra_federated_credential_name    = "sca-app-entra-user-${local.unique_id}"
+  resource_federated_credential_name = "sca-app-resource-user-${local.unique_id}"
 
   role_definition_scope = "/providers/Microsoft.Management/managementGroups/${var.entra_id}"
   role_assignment_scope = local.role_definition_scope
