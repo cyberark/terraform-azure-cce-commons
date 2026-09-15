@@ -10,6 +10,7 @@ The `terraform-azure-cce-commons` module provides common resources for Azure CCE
 - **Flexible Resource Management**: Support for both full resource creation and using existing resources
 - **Modular Architecture**: Clean separation between root module and service-specific submodules
 - **Reusable Across Azure CCE Modules**: Designed to be consumed by other terraform-azure-cce-* modules
+- **Optional AKS cluster permissions**: When `add_permissions_to_manage_cluster` is true, creates a K8s custom role (unless `sca_resource_k8s_custom_role_id` is provided) for downstream Entra/MG/Subscription assignment
 
 ## Prerequisites
 
@@ -42,6 +43,9 @@ module "cce_azure_shared" {
       sca_resource_app_id         = null
       sca_resource_custom_role_id = null
       sca_resource_wif_username   = null
+      # Optional: grant AKS-related RBAC (creates K8s custom role when sca_resource_k8s_custom_role_id is null)
+      # add_permissions_to_manage_cluster   = true
+      # sca_resource_k8s_custom_role_id     = null
     }
   }
 }
@@ -109,6 +113,8 @@ output "sca_resource_app_id" {
 | `sca.parameters.sca_resource_app_id` | Existing Resource application ID (when not creating resource app) | `string` | `null` | no |
 | `sca.parameters.sca_resource_custom_role_id` | Existing Resource custom role ID (when not creating resource role) | `string` | `null` | no |
 | `sca.parameters.sca_resource_wif_username` | Existing Resource WIF username (when not creating resource app) | `string` | `null` | no |
+| `sca.parameters.add_permissions_to_manage_cluster` | When true, enables optional AKS cluster RBAC (custom role + assignment at tenant scope) | `bool` | `false` | no |
+| `sca.parameters.sca_resource_k8s_custom_role_id` | Existing K8s custom role definition id; when null and flag is true, commons creates the role | `string` | `null` | no |
 
 ## Outputs
 
@@ -126,6 +132,8 @@ output "sca_resource_app_id" {
 | `resource_app_id` | The SCA Resource application (client) ID |
 | `resource_custom_role_id` | The SCA Resource custom role definition resource ID |
 | `resource_wif_user_id` | The SCA Resource trusted username (WIF subject) |
+| `add_permissions_to_manage_cluster` | Whether AKS/cluster permissions are enabled |
+| `resource_k8s_custom_role_id` | K8s custom role definition id (null when flag is false) |
 
 ## What Gets Created
 
@@ -141,9 +149,13 @@ output "sca_resource_app_id" {
 - Microsoft Entra ID application for SCA Resource
 - Custom Azure RBAC role definition at tenant scope (permissions for subscriptions, management groups, Resource Graph, role assignments)
 - Service principal and federated identity credentials for SCA Resource app
-- Role assignment of SCA Resource app to the resource custom role at tenant scope
 
-**Note:** Entra-level role assignment of the SCA Entra app to the Entra custom role is performed by the **Entra module** (`terraform-azure-cce-entra`). Management Group and Subscription modules use `shared_resources` to assign the SCA Resource app at their respective scopes.
+**When `add_permissions_to_manage_cluster = true`:**
+- Custom Azure RBAC role for AKS/cluster management (unless `sca_resource_k8s_custom_role_id` is supplied)
+- Role assignment of the SCA Resource app to the K8s custom role at tenant scope
+
+**Note:** This module does not create role assignments. The **Entra module** (`terraform-azure-cce-entra`) assigns the SCA Entra application to the custom Entra role. The **Management Group** and **Subscription** modules use `shared_resources` to assign the SCA Resource application to the custom Azure roles at each onboarded scope.
+
 
 ## Module Structure
 

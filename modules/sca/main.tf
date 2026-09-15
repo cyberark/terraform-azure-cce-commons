@@ -13,17 +13,17 @@ terraform {
 }
 
 locals {
-  p = var.parameters
+  params = var.parameters
 
   # Entra-level only when sca_entra_onboarding is true
-  create_entra = coalesce(local.p.sca_entra_onboarding, false)
+  create_entra = coalesce(local.params.sca_entra_onboarding, false)
 
   # Create Entra app/role only when param is null (and for Entra app, only when create_entra)
-  create_entra_app  = local.create_entra && local.p.sca_entra_app_id == null
-  create_entra_role = local.create_entra && local.p.sca_entra_custom_role_id == null
+  create_entra_app  = local.create_entra && local.params.sca_entra_app_id == null
+  create_entra_role = local.create_entra && local.params.sca_entra_custom_role_id == null
   # Resource-level always (when param is null)
-  create_resource_app  = local.p.sca_resource_app_id == null
-  create_resource_role = local.p.sca_resource_custom_role_id == null
+  create_resource_app  = local.params.sca_resource_app_id == null
+  create_resource_role = local.params.sca_resource_custom_role_id == null
 
   # Unique ID and naming (same as entra SCA module)
   tenant_id_suffix = element(split("-", var.tenant_id), length(split("-", var.tenant_id)) - 1)
@@ -38,7 +38,6 @@ locals {
   resource_federated_credential_name = "sca-app-resource-user-${local.unique_id}"
 
   role_definition_scope = "/providers/Microsoft.Management/managementGroups/${var.entra_id}"
-  role_assignment_scope = local.role_definition_scope
 
   microsoft_graph_app_id = "00000003-0000-0000-c000-000000000000"
   entra_permissions = {
@@ -59,8 +58,15 @@ locals {
   computed_entra_username    = "SCA_ISOLATED_SYSTEM_USER_FOR_AZURE_${local.tenant_id_hex}_${local.entra_id_hex}_ENTRA"
   computed_resource_username = "SCA_ISOLATED_SYSTEM_USER_FOR_AZURE_${local.tenant_id_hex}_${local.entra_id_hex}_RESOURCE"
   # Output values: use provided or computed; Entra fields null when not create_entra
-  entra_wif_user_id    = local.create_entra ? coalesce(local.p.sca_entra_wif_username, local.computed_entra_username) : null
-  resource_wif_user_id = coalesce(local.p.sca_resource_wif_username, local.computed_resource_username)
+  entra_wif_user_id    = local.create_entra ? coalesce(local.params.sca_entra_wif_username, local.computed_entra_username) : null
+  resource_wif_user_id = coalesce(local.params.sca_resource_wif_username, local.computed_resource_username)
+
+  add_permissions_to_manage_cluster = coalesce(try(local.params.add_permissions_to_manage_cluster, null), false)
+  resource_k8s_role_display_name    = "sca-k8s-access-resource-${local.unique_id}"
+  create_resource_k8s_role = (
+    local.add_permissions_to_manage_cluster &&
+    try(local.params.sca_resource_k8s_custom_role_id, null) == null
+  )
 }
 
 # Data source for Microsoft Graph
@@ -269,18 +275,21 @@ resource "azurerm_role_definition" "sca_resource_custom_role" {
   ]
 }
 
-data "azuread_service_principal" "resource_app_sp" {
-  count     = local.create_resource_role && !local.create_resource_app ? 1 : 0
-  client_id = local.p.sca_resource_app_id
-}
+resource "azurerm_role_definition" "sca_resource_k8s_custom_role" {
+  count       = local.create_resource_k8s_role ? 1 : 0
+  name        = local.resource_k8s_role_display_name
+  scope       = local.role_definition_scope
+  description = "SCA Custom role for Azure Kubernetes access"
+  permissions {
+    actions = [
+      "Microsoft.ContainerService/managedClusters/read",
+      "Microsoft.ContainerService/managedClusters/listClusterUserCredential/action"
+    ]
+    not_actions = []
+  }
+  assignable_scopes = [local.role_definition_scope]
 
-locals {
-  resource_role_principal_id = local.create_resource_app ? azuread_service_principal.sca_resource_app_sp[0].object_id : (local.create_resource_role ? data.azuread_service_principal.resource_app_sp[0].object_id : null)
-}
-
-resource "azurerm_role_assignment" "sca_resource_role_assignment" {
-  count              = local.create_resource_role ? 1 : 0
-  scope              = local.role_assignment_scope
-  role_definition_id = azurerm_role_definition.sca_resource_custom_role[0].role_definition_resource_id
-  principal_id       = local.resource_role_principal_id
+  lifecycle {
+    ignore_changes = [permissions]
+  }
 }

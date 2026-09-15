@@ -18,5 +18,7 @@ sca = {
     sca_resource_app_id         = null
     sca_resource_custom_role_id = null
     sca_resource_wif_username   = null
+    # add_permissions_to_manage_cluster   = true  # optional AKS RBAC (passed via sca output to MG/Subscription)
+    # sca_resource_k8s_custom_role_id     = null  # omit to let commons create the K8s role
   }
 }

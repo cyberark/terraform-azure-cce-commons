@@ -37,13 +37,15 @@ module "cce_azure_shared" {
   sca = {
     enable = var.sca.enable
     parameters = {
-      sca_entra_onboarding        = var.sca.parameters.sca_entra_onboarding
-      sca_entra_app_id            = var.sca.parameters.sca_entra_app_id
-      sca_entra_custom_role_id    = var.sca.parameters.sca_entra_custom_role_id
-      sca_entra_wif_username      = var.sca.parameters.sca_entra_wif_username
-      sca_resource_app_id         = var.sca.parameters.sca_resource_app_id
-      sca_resource_custom_role_id = var.sca.parameters.sca_resource_custom_role_id
-      sca_resource_wif_username   = var.sca.parameters.sca_resource_wif_username
+      sca_entra_onboarding              = var.sca.parameters.sca_entra_onboarding
+      sca_entra_app_id                  = var.sca.parameters.sca_entra_app_id
+      sca_entra_custom_role_id          = var.sca.parameters.sca_entra_custom_role_id
+      sca_entra_wif_username            = var.sca.parameters.sca_entra_wif_username
+      sca_resource_app_id               = var.sca.parameters.sca_resource_app_id
+      sca_resource_custom_role_id       = var.sca.parameters.sca_resource_custom_role_id
+      sca_resource_wif_username         = var.sca.parameters.sca_resource_wif_username
+      add_permissions_to_manage_cluster = var.sca.parameters.add_permissions_to_manage_cluster
+      sca_resource_k8s_custom_role_id   = var.sca.parameters.sca_resource_k8s_custom_role_id
     }
   }
 }

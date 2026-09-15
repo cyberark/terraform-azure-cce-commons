@@ -7,7 +7,7 @@ This example demonstrates: create SCA shared resources with the Commons module, 
 
 ## What This Example Does
 
-* Creates SCA shared resources in the Commons module (Entra app, Entra custom role, Resource app, Resource custom role, federated credentials, and role assignment at tenant scope)
+* Creates the shared SCA resources within the Commons module (Entra app, Entra custom role, Resource app, Resource custom role, federated credentials)
 * Passes the Commons `sca` output to the **Entra module** as `shared_resources`, so the Entra module performs SCA role assignment at Entra scope and registers the tenant with idsec
 * Outputs the `sca` object for use elsewhere (e.g. MG or Subscription modules) if needed
 
@@ -62,9 +62,10 @@ This example demonstrates: create SCA shared resources with the Commons module, 
 * Microsoft Entra ID application for SCA Resource
 * Custom Azure RBAC role definition at tenant scope (subscriptions, management groups, Resource Graph, role assignments)
 * Service principal and federated identity credentials for SCA Resource app
-* Role assignment of SCA Resource app to the resource custom role at tenant scope
 
-**Note:** Entra-level role assignment (SCA Entra app → Entra custom role) is done by the Entra module. Use this module's `sca` output as `shared_resources` in Entra, Management Group, and Subscription modules.
+**Optional AKS permissions:** Set `add_permissions_to_manage_cluster = true` in Commons `sca.parameters` to create a K8s custom role (pass through `sca` output to Entra/MG/Subscription for scope assignment).
+
+**Note:** The Commons module does not create role assignments; they are handled by downstream modules. The Entra app assignment is managed by the Entra module, while the Resource app assignment is managed by the Management Group and Subscription modules. Pass this example's `sca` output into those modules as `shared_resources`.
 
 ## Outputs
 
