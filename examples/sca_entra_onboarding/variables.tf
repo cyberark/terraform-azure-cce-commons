@@ -1,10 +1,10 @@
 variable "entra_id" {
-  description = "The Azure Entra ID (tenant ID)"
+  description = "The Microsoft Entra tenant ID (tenant ID)"
   type        = string
 }
 
 variable "subscription_id" {
-  description = "Azure subscription ID for the provider (must have permissions to create apps and role definitions)"
+  description = "The Azure subscription ID for the provider (must have permissions to create apps and role definitions)."
   type        = string
 }
 

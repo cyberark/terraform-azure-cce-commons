@@ -1,30 +1,30 @@
 variable "entra_id" {
-  description = "The Azure Entra ID (tenant ID)"
+  description = "The Microsoft Entra tenant ID (tenant ID)."
   type        = string
 }
 
 variable "entra_tenant_name" {
-  description = "The Azure Entra tenant name (for Subscription module)"
+  description = "The Microsoft Entra tenant name (for subscription module)."
   type        = string
 }
 
 variable "subscription_id" {
-  description = "Azure subscription ID (for provider and Subscription module)"
+  description = "The Azure subscription ID (for provider and subscription module)."
   type        = string
 }
 
 variable "subscription_name" {
-  description = "Azure subscription display name (for Subscription module)"
+  description = "The Azure subscription display name (for subscription module)."
   type        = string
 }
 
 variable "management_group_id" {
-  description = "The Azure Management Group ID to onboard for SCA"
+  description = "The Azure management group ID."
   type        = string
 }
 
 variable "sca" {
-  description = "SCA configuration for Commons (and enable/disable for MG and Subscription)"
+  description = "The SCA configuration for Commons (and enable/disable for management group and subscription)."
   type = object({
     enable = optional(bool, true)
     parameters = optional(object({

@@ -18,5 +18,5 @@ output "sca" {
       : null
     )
   }
-  description = "SCA shared resources (created or passed through); Entra fields null when sca_entra_onboarding is false; resource_k8s_custom_role_id set when AKS/cluster permissions are enabled"
+  description = "SCA shared resources (created or passed through); Microsoft Entra tenant fields null when sca_entra_onboarding is false; resource_k8s_custom_role_id set when AKS/cluster permissions are enabled."
 }

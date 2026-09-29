@@ -1,10 +1,10 @@
 variable "entra_id" {
-  description = "The Azure Entra ID"
+  description = "The Microsoft Entra tenant ID"
   type        = string
 }
 
 variable "sca" {
-  description = "Configuration for SCA service. parameters.add_permissions_to_manage_cluster enables optional AKS cluster RBAC; parameters.sca_resource_k8s_custom_role_id is created in commons when null and the flag is true, or pass an existing role definition id to reuse."
+  description = "The SCA configuration. parameters.add_permissions_to_manage_cluster enables optional AKS cluster RBAC; parameters.sca_resource_k8s_custom_role_id is created in commons when null and the flag is true, or pass an existing role definition ID to reuse."
   type = object({
     enable = optional(bool, false)
     parameters = optional(object({

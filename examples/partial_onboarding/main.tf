@@ -24,11 +24,11 @@ provider "azurerm" {
 provider "azuread" {}
 
 provider "idsec" {
-  # Configure with your CyberArk tenant credentials
+  # Configure with your Idira tenant credentials
   # See: https://registry.terraform.io/providers/cyberark/idsec/latest/docs
 }
 
-# Commons: SCA shared resources (Entra app, Resource app, roles, etc.)
+# Commons: SCA shared resources (Microsoft Entra tenant app, resource app, roles, etc.)
 module "cce_azure_shared" {
   source   = "cyberark/cce-commons/azure"
   version  = "0.1.0"
