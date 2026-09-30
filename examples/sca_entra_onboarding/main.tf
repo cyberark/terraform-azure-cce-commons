@@ -3,7 +3,7 @@ terraform {
   required_providers {
     idsec = {
       source  = "cyberark/idsec"
-      version = "0.12.0"
+      version = "0.12.1"
     }
     azuread = {
       source  = "hashicorp/azuread"
