@@ -14,9 +14,9 @@ This example demonstrates: create SCA shared resources with the Commons module, 
 ## Prerequisites
 
 * Azure subscription and Microsoft Entra tenant
-* CyberArk tenant with CCE and idsec provider configured
+* Idira tenant with CCE and idsec provider configured
 * Terraform >= 1.8.5
-* CyberArk `idsec` provider configured — https://registry.terraform.io/providers/cyberark/idsec/latest/docs#example-usage
+* Idira `idsec` provider configured — https://registry.terraform.io/providers/cyberark/idsec/latest/docs#example-usage
 * Appropriate Azure permissions (Application Administrator, User Access Administrator or Owner)
 * The `terraform-azure-cce-entra` module available locally (or set `entra_module_source` in tfvars)
 
@@ -28,7 +28,7 @@ This example demonstrates: create SCA shared resources with the Commons module, 
     entra_id = "0b659685-1a00-43cd-b994-555bac390ecf"
     ```
 
-2. Configure the idsec provider (e.g. environment variables or provider block) with your CyberArk credentials.
+2. Configure the idsec provider (for example, via environment variables or a provider block) with your Idira tenant credentials.
 
 3. Initialize Terraform:
 

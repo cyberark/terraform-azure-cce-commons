@@ -1,4 +1,4 @@
-# CyberArk Azure CCE Commons Module
+# CCE Azure Commons Module
 
 ## Overview
 
@@ -186,8 +186,8 @@ Both examples show the same pattern: run Commons, then pass `module.cce_azure_sh
 
 ## Documentation
 
-For more information about the CyberArk Identity Security Platform and Azure CCE integration:
-- [CyberArk Documentation](https://docs.cyberark.com/)
+For more information about the Idira Identity Security Platform and Azure CCE integration:
+- [CCE Documentation](https://docs.cyberark.com/)
 - Related modules:
   - `terraform-azure-cce-entra`
   - `terraform-azure-cce-subscription`
