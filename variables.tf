@@ -21,3 +21,11 @@ variable "sca" {
   })
   default = { enable = false, parameters = {} }
 }
+
+variable "cds" {
+  description = "The CDS configuration. When enable is true, commons creates the two CDS applications (Microsoft Entra tenant and resources), their custom roles and the Entra app's root management group assignment, once per Microsoft Entra tenant."
+  type = object({
+    enable = optional(bool, false)
+  })
+  default = { enable = false }
+}

@@ -9,7 +9,7 @@ This example demonstrates: create SCA shared resources with the Commons module, 
 
 * Creates the shared SCA resources within the Commons module (Entra app, Entra custom role, Resource app, Resource custom role, federated credentials)
 * Passes the Commons `sca` output to the **Entra module** as `shared_resources`, so the Entra module performs SCA role assignment at Entra scope and registers the tenant with idsec
-* Outputs the `sca` object for use elsewhere (e.g. MG or Subscription modules) if needed
+* Outputs the `sca` object for use elsewhere (for example, management group or subscription modules) if needed
 
 ## Prerequisites
 
@@ -63,9 +63,9 @@ This example demonstrates: create SCA shared resources with the Commons module, 
 * Custom Azure RBAC role definition at tenant scope (subscriptions, management groups, Resource Graph, role assignments)
 * Service principal and federated identity credentials for SCA Resource app
 
-**Optional AKS permissions:** Set `add_permissions_to_manage_cluster = true` in Commons `sca.parameters` to create a K8s custom role (pass through `sca` output to Entra/MG/Subscription for scope assignment).
+**Optional AKS permissions:** Set `add_permissions_to_manage_cluster = true` in Commons `sca.parameters` to create a K8s custom role (pass through `sca` output to Entra/management group/subscription for scope assignment).
 
-**Note:** The Commons module does not create role assignments; they are handled by downstream modules. The Entra app assignment is managed by the Entra module, while the Resource app assignment is managed by the Management Group and Subscription modules. Pass this example's `sca` output into those modules as `shared_resources`.
+**Note:** The Commons module does not create role assignments; they are handled by downstream modules. The Entra app assignment is managed by the Entra module, while the Resource app assignment is managed by the management group and subscription modules. Pass this example's `sca` output into those modules as `shared_resources`.
 
 ## Outputs
 
@@ -75,4 +75,4 @@ This example outputs:
 
 ## Next Steps
 
-After successful deployment, the Entra scope is already onboarded to SCA by this example. To onboard Management Group or Subscription to SCA, use the same pattern: pass the `sca` output (from Commons) to the MG or Subscription module as `sca = { enable = true, shared_resources = module.cce_azure_shared.sca }` — see the [partial_onboarding](../partial_onboarding) example.
+After successful deployment, the Entra scope is already onboarded to SCA by this example. To onboard management group or subscription to SCA, use the same pattern: pass the `sca` output (from Commons) to the management group or subscription module as `sca = { enable = true, shared_resources = module.cce_azure_shared.sca }` — see the [sca_partial_onboarding](../sca_partial_onboarding) example.

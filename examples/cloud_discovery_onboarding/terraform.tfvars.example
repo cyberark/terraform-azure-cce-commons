@@ -1,0 +1,14 @@
+entra_id        = "my-entra-tenant-id" # Replace with your Microsoft Entra tenant ID
+subscription_id = "my-subscription-id" # Replace with your subscription ID
+
+# Partial onboarding only: required when the matching management group or subscription flag is true
+management_group_id = "my-mg-id"        # Replace with your management group ID
+entra_tenant_name   = "my-tenant"       # Replace with your Entra tenant name
+subscription_name   = "My subscription" # Replace with your subscription display name
+
+cloud_discovery_commons_enable = true
+cloud_discovery_entra_enable   = true # Set to false for partial onboarding
+
+# Partial onboarding: set to true to onboard the management group or subscription
+cloud_discovery_management_group_enable = false
+cloud_discovery_subscription_enable     = false

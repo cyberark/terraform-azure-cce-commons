@@ -13,6 +13,7 @@ data "idsec_cce_azure_identity_params" "get_wif_data" {}
 
 locals {
   sca_wif_data = try(data.idsec_cce_azure_identity_params.get_wif_data.identity_params["sca"], null)
+  cds_wif_data = try(data.idsec_cce_azure_identity_params.get_wif_data.identity_params["cds"], null)
   tenant_id    = data.idsec_cce_azure_identity_params.get_wif_data.tenant_id
 }
 
@@ -24,4 +25,13 @@ module "sca" {
   identity_issuer   = try(local.sca_wif_data["identity_app_issuer"], "")
   identity_audience = try(local.sca_wif_data["identity_app_audience"], "")
   parameters        = var.sca.parameters
+}
+
+module "cds" {
+  source            = "./modules/cds"
+  count             = var.cds.enable ? 1 : 0
+  entra_id          = var.entra_id
+  tenant_id         = local.tenant_id
+  identity_issuer   = try(local.cds_wif_data["identity_app_issuer"], "")
+  identity_audience = try(local.cds_wif_data["identity_app_audience"], "")
 }
