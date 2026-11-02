@@ -31,7 +31,7 @@ provider "idsec" {
 # Commons: Create the shared Secrets Hub identity (app, service principal, federated credential, custom role)
 module "cce_azure_shared" {
   source      = "cyberark/cce-commons/azure"
-  version     = "0.8.0"
+  version     = "0.8.1"
   entra_id    = var.entra_id
   secrets_hub = { enable = true }
 }

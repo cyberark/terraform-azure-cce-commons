@@ -13,7 +13,7 @@ terraform {
 }
 
 locals {
-  # Unique ID and naming (same as the Secrets Hub 0.0.4 onboarding script)
+  # Unique ID and naming (same as the Secrets Hub 0.0.3 onboarding script)
   tenant_id_suffix = element(split("-", var.tenant_id), length(split("-", var.tenant_id)) - 1)
   entra_id_suffix  = element(split("-", var.entra_id), length(split("-", var.entra_id)) - 1)
   unique_id        = "${local.tenant_id_suffix}-${local.entra_id_suffix}"
@@ -28,7 +28,7 @@ locals {
   # The Entra tenant ID is also the root management group ID, so the role is defined and assignable at the root.
   role_definition_scope = "/providers/Microsoft.Management/managementGroups/${var.entra_id}"
 
-  service_tags = ["secrets_hub-version:0.0.4"]
+  service_tags = ["secrets_hub-version:0.0.3"]
 }
 
 resource "azuread_application" "secrets_hub_app" {
@@ -57,7 +57,7 @@ resource "azuread_application_federated_identity_credential" "secrets_hub_creden
 resource "azurerm_role_definition" "secrets_hub_custom_role" {
   name        = local.role_name
   scope       = local.role_definition_scope
-  description = "Custom role for Secrets Hub access to Key Vault and Resource Graph | secrets_hub-version:0.0.4"
+  description = "Custom role for Secrets Hub access to Key Vault and Resource Graph | secrets_hub-version:0.0.3"
   permissions {
     actions = [
       "Microsoft.KeyVault/vaults/read",
