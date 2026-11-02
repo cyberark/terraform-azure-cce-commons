@@ -22,6 +22,14 @@ variable "sca" {
   default = { enable = false, parameters = {} }
 }
 
+variable "secrets_hub" {
+  description = "The Secrets Hub configuration. When enable is true, commons creates the shared Secrets Hub identity (application, service principal, federated credential, and custom role). Pass the secrets_hub output to the Entra or management group module as shared_resources. That module creates the role assignments."
+  type = object({
+    enable = optional(bool, false)
+  })
+  default = { enable = false }
+}
+
 variable "cds" {
   description = "The CDS configuration. When enable is true, commons creates the two CDS applications (Microsoft Entra tenant and resources), their custom roles and the Entra app's root management group assignment, once per Microsoft Entra tenant."
   type = object({
