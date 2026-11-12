@@ -1,6 +1,7 @@
 # Constant output shape: same fields always; null when Entra-level skipped or value passed through
 output "sca" {
   value = {
+    version                           = local.service_version
     entra_app_id                      = local.create_entra_app ? azuread_application.sca_entra_app[0].client_id : local.params.sca_entra_app_id
     entra_custom_role_id              = local.create_entra_role ? azurerm_role_definition.sca_entra_custom_role[0].role_definition_resource_id : local.params.sca_entra_custom_role_id
     entra_wif_user_id                 = local.entra_wif_user_id
@@ -18,5 +19,5 @@ output "sca" {
       : null
     )
   }
-  description = "SCA shared resources (created or passed through); Microsoft Entra tenant fields null when sca_entra_onboarding is false; resource_k8s_custom_role_id set when AKS/cluster permissions are enabled."
+  description = "SCA shared resources (created or passed through); version is the SCA service version the consumer modules must match; Microsoft Entra tenant fields null when sca_entra_onboarding is false; resource_k8s_custom_role_id set when AKS/cluster permissions are enabled."
 }

@@ -13,6 +13,10 @@ terraform {
 }
 
 locals {
+  # Version of the SCA service resources this module creates. Must match the SCA version registered by the
+  # subscription, management group and Entra modules, which verify it through the `version` field of the sca output.
+  service_version = "0.0.4"
+
   params = var.parameters
 
   # Entra-level only when sca_entra_onboarding is true

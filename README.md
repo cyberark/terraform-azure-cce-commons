@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `terraform-azure-cce-commons` module creates the Azure resources that SCA (Secure Cloud Access), Cloud Discovery (for Cloud service entitlements), and Secrets Hub share across Azure CCE (Connect cloud environments) onboarding. The Microsoft Entra tenant, subscription, and management group modules consume its outputs, so these resources are created once and reused.
+The `terraform-azure-cce-commons` module creates the Azure resources that SCA (Secure Cloud Access), Cloud Discovery (for Cloud service entitlements), and Secrets Hub share across Azure CCE (Connect Cloud Environments) onboarding. The Microsoft Entra tenant, subscription, and management group modules consume its outputs, so these resources are created once and reused.
 
 ## Features
 

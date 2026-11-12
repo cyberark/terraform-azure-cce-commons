@@ -28,7 +28,10 @@ locals {
   # The Entra tenant ID is also the root management group ID, so the role is defined and assignable at the root.
   role_definition_scope = "/providers/Microsoft.Management/managementGroups/${var.entra_id}"
 
-  service_tags = ["secrets_hub-version:0.0.3"]
+  # Must match the Secrets Hub version registered by the management group and Entra modules, which verify it
+  # through the `version` field of the secrets_hub output.
+  service_version = "0.0.3"
+  service_tags    = ["secrets_hub-version:${local.service_version}"]
 }
 
 resource "azuread_application" "secrets_hub_app" {
@@ -57,7 +60,7 @@ resource "azuread_application_federated_identity_credential" "secrets_hub_creden
 resource "azurerm_role_definition" "secrets_hub_custom_role" {
   name        = local.role_name
   scope       = local.role_definition_scope
-  description = "Custom role for Secrets Hub access to Key Vault and Resource Graph | secrets_hub-version:0.0.3"
+  description = "Custom role for Secrets Hub access to Key Vault and Resource Graph | secrets_hub-version:${local.service_version}"
   permissions {
     actions = [
       "Microsoft.KeyVault/vaults/read",
